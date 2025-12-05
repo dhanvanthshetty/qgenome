@@ -16,9 +16,9 @@ function DNAHelix({ sequence }) {
   const helixData = useMemo(() => {
     const bases = sequence.split('');
     const numBases = bases.length;
-    const height = numBases * 0.4; // Vertical spacing between base pairs
+    const height = numBases * 0.5; // Vertical spacing between base pairs
     const yOffset = -height / 2;
-    const radius = 1.2; // Helix radius
+    const radius = 1.5; // Helix radius - larger for better separation
 
     return bases.map((base, i) => {
       const t = i / numBases;
@@ -62,55 +62,55 @@ function DNAHelix({ sequence }) {
 
         return (
           <group key={i}>
-            {/* First strand sphere (Cyan/Blue) */}
-            <mesh position={data.pos1}>
-              <sphereGeometry args={[0.22, 32, 32]} />
-              <meshStandardMaterial
-                color="#00d4ff"
-                metalness={0.4}
-                roughness={0.3}
-                emissive="#00a8cc"
-                emissiveIntensity={0.3}
-              />
-            </mesh>
-
-            {/* Second strand sphere (Red) */}
-            <mesh position={data.pos2}>
-              <sphereGeometry args={[0.22, 32, 32]} />
-              <meshStandardMaterial
-                color="#ff3333"
-                metalness={0.4}
-                roughness={0.3}
-                emissive="#cc0000"
-                emissiveIntensity={0.3}
-              />
-            </mesh>
-
-            {/* Base pair connector (horizontal gray cylinder) */}
+            {/* Base pair connector (horizontal gray cylinder) - render first so spheres are on top */}
             <CylinderBetweenPoints
               start={data.pos1}
               end={data.pos2}
-              color="#909090"
-              radius={0.06}
+              color="#787878"
+              radius={0.035}
             />
 
-            {/* Backbone connections (diagonal gray cylinders) */}
+            {/* Backbone connections (diagonal gray cylinders) - thin rods */}
             {data.nextPos1 && (
               <CylinderBetweenPoints
                 start={data.pos1}
                 end={data.nextPos1}
-                color="#a0a0a0"
-                radius={0.06}
+                color="#888888"
+                radius={0.035}
               />
             )}
             {data.nextPos2 && (
               <CylinderBetweenPoints
                 start={data.pos2}
                 end={data.nextPos2}
-                color="#a0a0a0"
-                radius={0.06}
+                color="#888888"
+                radius={0.035}
               />
             )}
+
+            {/* First strand sphere (Cyan/Blue) - LARGER and more prominent */}
+            <mesh position={data.pos1}>
+              <sphereGeometry args={[0.35, 32, 32]} />
+              <meshStandardMaterial
+                color="#00d4ff"
+                metalness={0.5}
+                roughness={0.2}
+                emissive="#0099bb"
+                emissiveIntensity={0.4}
+              />
+            </mesh>
+
+            {/* Second strand sphere (Red) - LARGER and more prominent */}
+            <mesh position={data.pos2}>
+              <sphereGeometry args={[0.35, 32, 32]} />
+              <meshStandardMaterial
+                color="#ff3333"
+                metalness={0.5}
+                roughness={0.2}
+                emissive="#bb0000"
+                emissiveIntensity={0.4}
+              />
+            </mesh>
           </group>
         );
       })}
@@ -140,17 +140,17 @@ function CylinderBetweenPoints({ start, end, color, radius = 0.06 }) {
 
   return (
     <mesh position={midpoint} rotation={euler}>
-      <cylinderGeometry args={[radius, radius, length, 16]} />
+      <cylinderGeometry args={[radius, radius, length, 12]} />
       <meshStandardMaterial
         color={color}
-        metalness={0.5}
-        roughness={0.4}
+        metalness={0.2}
+        roughness={0.6}
       />
     </mesh>
   );
 }
 
-export default function DNAHelix3D({ sequence = 'ATCGATCGATCGATCGATCGATCGATCG', alignmentData }) {
+export default function DNAHelix3D({ sequence = 'ATCGATCGATCGATCGATCGATCG', alignmentData }) {
   return (
     <div style={{
       width: '100%',
@@ -162,7 +162,7 @@ export default function DNAHelix3D({ sequence = 'ATCGATCGATCGATCGATCGATCGATCG', 
       position: 'relative'
     }}>
       <Canvas
-        camera={{ position: [4, 0, 4], fov: 45 }}
+        camera={{ position: [5, 0.5, 5], fov: 45 }}
         gl={{ antialias: true, alpha: false }}
       >
         {/* Dark background */}
