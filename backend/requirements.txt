@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pennylane
+qiskit
+numpy
+scipy
+biopython
+websockets
+python-multipart
