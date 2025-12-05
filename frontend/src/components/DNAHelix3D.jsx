@@ -16,14 +16,14 @@ function DNAHelix({ sequence }) {
   const helixData = useMemo(() => {
     const bases = sequence.split('');
     const numBases = bases.length;
-    const height = numBases * 0.5; // Vertical spacing between base pairs
+    const height = numBases * 0.45; // Vertical spacing between base pairs
     const yOffset = -height / 2;
     const radius = 1.5; // Helix radius - larger for better separation
 
     return bases.map((base, i) => {
       const t = i / numBases;
       const y = t * height + yOffset;
-      const angle = t * Math.PI * 6; // 3 full turns
+      const angle = t * Math.PI * 8; // 4 full turns for longer helix
 
       // First strand (blue/cyan)
       const x1 = Math.cos(angle) * radius;
@@ -34,7 +34,7 @@ function DNAHelix({ sequence }) {
       const z2 = Math.sin(angle + Math.PI) * radius;
 
       // Next positions for backbone connections
-      const nextAngle = ((i + 1) / numBases) * Math.PI * 6;
+      const nextAngle = ((i + 1) / numBases) * Math.PI * 8;
       const nextY = ((i + 1) / numBases) * height + yOffset;
 
       return {
@@ -150,7 +150,7 @@ function CylinderBetweenPoints({ start, end, color, radius = 0.06 }) {
   );
 }
 
-export default function DNAHelix3D({ sequence = 'ATCGATCGATCGATCGATCGATCG', alignmentData }) {
+export default function DNAHelix3D({ sequence = 'ATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCG', alignmentData }) {
   return (
     <div style={{
       width: '100%',
@@ -162,7 +162,7 @@ export default function DNAHelix3D({ sequence = 'ATCGATCGATCGATCGATCGATCG', alig
       position: 'relative'
     }}>
       <Canvas
-        camera={{ position: [5, 0.5, 5], fov: 45 }}
+        camera={{ position: [6, 0, 6], fov: 50 }}
         gl={{ antialias: true, alpha: false }}
       >
         {/* Dark background */}
